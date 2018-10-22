@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows.Threading;
-using Prism.Mvvm;
-using Prism.Commands;
-using DragAndDrop.Model;
-using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows.Threading;
+using Prism.Commands;
+using Prism.Mvvm;
+
+using DragAndDrop.Model;
 
 namespace DragAndDrop
 {
@@ -56,6 +57,11 @@ namespace DragAndDrop
         /// </summary>
         public DelegateCommand SettingCommand { get; set; }
 
+        /// <summary>
+        /// カード削除コマンド
+        /// </summary>
+        public DelegateCommand<ImageCard> RemoveCardCommand { get; set; }
+
         private bool isBusy;
         /// <summary>
         /// 待機状態
@@ -84,6 +90,17 @@ namespace DragAndDrop
                     Owner = System.Windows.Application.Current.MainWindow
                 };
                 dialog.ShowDialog();
+            });
+
+            this.RemoveCardCommand = new DelegateCommand<ImageCard>(c =>
+            {
+                var card = this.ImageCards.SingleOrDefault(ic => ic.ImageGuid == c.ImageGuid);
+                if (card == null)
+                {
+                    return;
+                }
+
+                this.ImageCards.Remove(card);
             });
         }
 

@@ -42,9 +42,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding TabItems}">
+        <TabControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Path=TabItems}">
             <TabItem Header="ImageViewer">
-                <ListBox x:Name="ImageList" ItemsSource="{Binding Path=ImageCards, Mode=OneWay}">
+                <ListBox ItemsSource="{Binding Path=ImageCards, Mode=OneWay}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel ScrollViewer.VerticalScrollBarVisibility="Auto"/>
@@ -73,8 +73,11 @@
                                     </StackPanel>
                                     <StackPanel HorizontalAlignment="Right" Grid.Row="1" Orientation="Horizontal" Margin="8">
                                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                                Command="{Binding Path=DataContext.RemoveCardCommand, Mode=OneTime,
+                                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}"
+                                                CommandParameter="{Binding}"
                                                 materialDesign:RippleAssist.IsCentered="True">
-                                            <materialDesign:PackIcon Kind="Home" />
+                                            <materialDesign:PackIcon Kind="Delete" />
                                         </Button>
                                     </StackPanel>
                                 </Grid>
