@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
+using DragAndDrop.Model;
 
 namespace DragAndDrop
 {
@@ -35,7 +38,16 @@ namespace DragAndDrop
                 return;
             }
 
-            await vm.AddImageCards(files);         
+            try
+            {
+                await vm.AddImageCards(files);
+                await ImageDetermination.SendImage(vm.ImageCards.Select(c => c.ImageFilePath));
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
         }
     }
 }
