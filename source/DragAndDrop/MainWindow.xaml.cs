@@ -30,8 +30,12 @@ namespace DragAndDrop
                 return;
             }
 
-            var vm = this.DataContext as MainWindowViewModel;
-            await vm?.AddImageCards(files);         
+            if (!(this.DataContext is MainWindowViewModel vm))
+            {
+                return;
+            }
+
+            await vm.AddImageCards(files);         
         }
     }
 }
