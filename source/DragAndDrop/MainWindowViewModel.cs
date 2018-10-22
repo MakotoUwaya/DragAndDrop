@@ -8,6 +8,7 @@ using DragAndDrop.Model;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Linq;
+using System.Reflection;
 
 namespace DragAndDrop
 {
@@ -29,6 +30,20 @@ namespace DragAndDrop
         {
             get => this.statusTime;
             set => this.SetProperty(ref this.statusTime, value);
+        }
+
+        /// <summary>
+        /// クライアントバージョン
+        /// </summary>
+        public string ClientVersion
+        {
+            get
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var asmName = assembly.GetName();
+                var version = asmName.Version;
+                return $"Ver {version.Major}.{version.Minor}.{version.Build}";
+            }
         }
 
         /// <summary>

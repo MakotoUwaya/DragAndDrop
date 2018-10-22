@@ -37,9 +37,6 @@
     </controls:MetroWindow.RightWindowCommands>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -92,8 +89,14 @@
                                  SpeedRatio="1.5" IsActive="True" Style="{DynamicResource LoadingIndicatorArcsRingStyle}"/>
 
         <StatusBar Grid.Column="0" Grid.Row="1" Name="BottomStatusBar" Height="Auto">
-            <Grid HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=BottomStatusBar, Mode=OneWay}">
-                <StatusBarItem Grid.Column="0" Content="{Binding StatusTime}" />
+            <Grid HorizontalAlignment="Stretch" Width="{Binding Path=ActualWidth, ElementName=BottomStatusBar, Mode=OneWay}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StatusBarItem Grid.Column="0" Content="{Binding Path=StatusTime, Mode=OneWay}" />
+                <StatusBarItem Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,10,0"
+                               Content="{Binding Path=ClientVersion, Mode=OneTime}" />
             </Grid>
         </StatusBar>
     </Grid>
