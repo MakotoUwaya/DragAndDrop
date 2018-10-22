@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Input;
 using Prism.Commands;
 
 namespace DragAndDrop.Model
@@ -33,7 +34,7 @@ namespace DragAndDrop.Model
         /// <summary>
         /// 画像ファイルをビューアで開くコマンド
         /// </summary>
-        public DelegateCommand ImagePreviewCommand { get; }
+        public ICommand ImagePreviewCommand { get; }
 
         /// <summary>
         /// コンストラクタ
