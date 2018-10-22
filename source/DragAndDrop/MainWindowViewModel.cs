@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Threading;
 using Prism.Mvvm;
 using Prism.Commands;
@@ -82,19 +83,26 @@ namespace DragAndDrop
         /// <summary>
         /// 画像カードを追加する
         /// </summary>
-        /// <param name="imageFilePath">画像ファイルパス</param>
-        public async Task AddImageCards(string[] imageFilePath)
+        /// <param name="imagePath">画像パス</param>
+        public async Task AddImageCards(string[] imagePath)
         {
             this.IsBusy = true;
-            foreach (var file in imageFilePath)
+            foreach (var path in imagePath)
             {
-                await Task.Run(() =>
+                if (File.Exists(path))
                 {
-                    var imageCard = new ImageCard(file);
-                    this.ImageCards.Add(imageCard);
-                });
-            }            
-         
+                    await Task.Run(() =>
+                    {
+                        var imageCard = new ImageCard(path);
+                        this.ImageCards.Add(imageCard);
+                    });
+                }
+                else if (Directory.Exists(path))
+                {
+                    await this.AddImageCards(Directory.GetDirectories(path));
+                    await this.AddImageCards(Directory.GetFiles(path));
+                }
+            }
             this.IsBusy = false;
         }
 
