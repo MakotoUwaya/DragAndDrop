@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using System;
+using Prism.Mvvm;
 using Prism.Commands;
 
 namespace DragAndDrop.Functions.Setting
@@ -16,6 +17,20 @@ namespace DragAndDrop.Functions.Setting
         {
             get => this.isWindowClosed;
             set => this.SetProperty(ref this.isWindowClosed, value);
+        }
+
+        /// <summary>
+        /// 画像判定機のURLエンドポイント
+        /// </summary>
+        public string ImageDeterminationUrl
+        {
+            get => Properties.Settings.Default.ImageDeterminationUrl;
+            set
+            {
+                Properties.Settings.Default.ImageDeterminationUrl = value;
+                Properties.Settings.Default.Save();
+                this.RaisePropertyChanged(nameof(this.ImageDeterminationUrl));
+            } 
         }
 
         /// <summary>

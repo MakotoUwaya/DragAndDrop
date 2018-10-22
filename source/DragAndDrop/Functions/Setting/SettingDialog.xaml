@@ -17,29 +17,26 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="9*" />
+            <RowDefinition Height="8*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
         <TabControl Grid.Row="0">
             <TabItem Header="Settings">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="4*" />
-                    </Grid.ColumnDefinitions>
-
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Text="Root Directory" VerticalAlignment="Center" />
-                    <TextBox  Grid.Row="0" Grid.Column="1"  Margin="5, 5, 90, 5" Text="{Binding KancolleSetting.SaveDirectory, Mode=TwoWay}" VerticalAlignment="Center" />
-                    <Button Grid.Row="0" Grid.Column="1" Margin="5,10" Padding="10,0" Width="80" HorizontalAlignment="Right" Content="Ref" />
-
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Text="Image determination endpoint URL" VerticalAlignment="Center" />
+                    <TextBox  Grid.Row="0" Grid.Column="1" Margin="10, 5, 90, 5" Text="{Binding Path=ImageDeterminationUrl, Mode=TwoWay}" 
+                              VerticalAlignment="Center" />
                 </Grid>
             </TabItem>
         </TabControl>

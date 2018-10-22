@@ -25,12 +25,13 @@ namespace DragAndDrop.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection SakuraDownloadFileList {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080")]
+        public string ImageDeterminationUrl {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["SakuraDownloadFileList"]));
+                return ((string)(this["ImageDeterminationUrl"]));
             }
             set {
-                this["SakuraDownloadFileList"] = value;
+                this["ImageDeterminationUrl"] = value;
             }
         }
     }
