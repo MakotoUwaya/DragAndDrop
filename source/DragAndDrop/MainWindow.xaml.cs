@@ -41,7 +41,7 @@ namespace DragAndDrop
             try
             {
                 await vm.AddImageCards(files);
-                await ImageDetermination.SendImage(vm.ImageCards.Select(c => c.ImageFilePath));
+                await ImageDetermination.Determinate(vm.ImageCards.Where(c => !c.IsChecked));
 
             }
             catch (Exception exception)

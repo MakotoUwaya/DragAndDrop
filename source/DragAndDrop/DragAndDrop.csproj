@@ -135,6 +135,7 @@
       <DependentUpon>SettingDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Functions\Setting\SettingDialogViewModel.cs" />
+    <Compile Include="Model\IImageCard.cs" />
     <Compile Include="Model\ImageCard.cs" />
     <Compile Include="Model\ImageDetermination.cs" />
     <Compile Include="RelayCommand.cs" />

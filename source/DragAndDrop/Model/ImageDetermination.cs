@@ -12,32 +12,41 @@ namespace DragAndDrop.Model
     /// </summary>
     public class ImageDetermination
     {
+
+        private const string ConsumerKeyString = "gclass_client";
+
         /// <summary>
-        /// ファイル送信
+        /// 判定処理
         /// </summary>
-        /// <param name="filePathList">送信するファイルパスのリスト</param>
-        public static async Task SendImage(IEnumerable<string> filePathList)
+        /// <param name="imageCards">判定する画像のリスト</param>
+        internal static async Task Determinate(IEnumerable<IImageCard> imageCards)
         {
             var request = new HttpClient();
-            var response = await request.PostAsync(Properties.Settings.Default.ImageDeterminationUrl, CreateContent(filePathList));
+            var response = await request.PostAsync(Properties.Settings.Default.ImageDeterminationUrl, CreateContent(imageCards));
             if (!response.IsSuccessStatusCode)
             {
                 throw new WebException(response.ReasonPhrase);
             }
         }
 
-        private static MultipartFormDataContent CreateContent(IEnumerable<string> filePathList)
+        private static MultipartFormDataContent CreateContent(IEnumerable<IImageCard> imageCards)
         {
             var content = new MultipartFormDataContent();
-            foreach (var filePath in filePathList)
+            foreach (var imageCard in imageCards)
             {
-                var fileContent = new StreamContent(File.OpenRead(filePath));
+                var fileContent = new StreamContent(File.OpenRead(imageCard.ImageFilePath));
                 fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = Path.GetFileName(filePath)
+                    Name = ConsumerKeyString,
+                    FileName = Path.GetFileName(imageCard.ImageFilePath),
+                    Parameters =
+                    {
+                        new NameValueHeaderValue("fileguid", imageCard.ImageGuid.ToString()),
+                    },
                 };
 
                 content.Add(fileContent);
+                imageCard.IsChecked = true;
             }
             return content;
         }

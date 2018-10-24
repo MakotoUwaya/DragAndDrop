@@ -9,7 +9,7 @@ namespace DragAndDrop.Model
     /// <summary>
     /// カードに画像を表示するためのクラス
     /// </summary>
-    public class ImageCard
+    public class ImageCard : IImageCard
     {
         /// <summary>
         /// 画像ファイルパス
@@ -35,6 +35,12 @@ namespace DragAndDrop.Model
         /// 画像ファイルをビューアで開くコマンド
         /// </summary>
         public ICommand ImagePreviewCommand { get; }
+
+        /// <summary>
+        /// 画像判別済
+        /// TODO: 2018-10-25 makoto.uwaya Undefined
+        /// </summary>
+        public bool IsChecked { get; set; }
 
         /// <summary>
         /// コンストラクタ
