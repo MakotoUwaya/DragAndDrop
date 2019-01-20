@@ -16,7 +16,7 @@ namespace DragAndDrop
     /// <summary>
     /// メインウィンドウ
     /// </summary>
-    public class MainWindowViewModel : BindableBase
+    internal class MainWindowViewModel : BindableBase
     {
         /// <summary>
         /// 現在時刻更新用のタイマー
