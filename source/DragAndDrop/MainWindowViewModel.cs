@@ -16,7 +16,7 @@ namespace DragAndDrop
     /// <summary>
     /// メインウィンドウ
     /// </summary>
-    public class MainWindowViewModel : BindableBase
+    internal class MainWindowViewModel : BindableBase
     {
         /// <summary>
         /// 現在時刻更新用のタイマー
@@ -50,7 +50,7 @@ namespace DragAndDrop
         /// <summary>
         /// 画像イメージのコレクション
         /// </summary>
-        public ObservableCollection<ImageCard> ImageCards { get; }
+        public ObservableCollection<IImageCard> ImageCards { get; }
 
         /// <summary>
         /// 設定コマンド
@@ -60,7 +60,7 @@ namespace DragAndDrop
         /// <summary>
         /// カード削除コマンド
         /// </summary>
-        public DelegateCommand<ImageCard> RemoveCardCommand { get; set; }
+        public DelegateCommand<IImageCard> RemoveCardCommand { get; set; }
 
         private bool isBusy;
         /// <summary>
@@ -79,8 +79,9 @@ namespace DragAndDrop
         {
             this.StartTimer();
             this.IsBusy = true;
-            this.ImageCards = new ObservableCollection<ImageCard>();
+            this.ImageCards = new ObservableCollection<IImageCard>();
             BindingOperations.EnableCollectionSynchronization(this.ImageCards, new object());
+            this.ImageCards.Add(new AddImageButtonCard());
 
             // 設定画面を開く処理
             this.SettingCommand = new DelegateCommand(() =>
@@ -92,7 +93,7 @@ namespace DragAndDrop
                 dialog.ShowDialog();
             });
 
-            this.RemoveCardCommand = new DelegateCommand<ImageCard>(c =>
+            this.RemoveCardCommand = new DelegateCommand<IImageCard>(c =>
             {
                 var card = this.ImageCards.SingleOrDefault(ic => ic.ImageGuid == c.ImageGuid);
                 if (card == null)
@@ -126,7 +127,7 @@ namespace DragAndDrop
                     await Task.Run(() =>
                     {
                         var imageCard = new ImageCard(path);
-                        this.ImageCards.Add(imageCard);
+                        this.ImageCards.Insert(this.ImageCards.Count - 1, imageCard);
                     });
                 }
                 else if (Directory.Exists(path))

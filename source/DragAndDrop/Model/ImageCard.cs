@@ -34,7 +34,7 @@ namespace DragAndDrop.Model
         /// <summary>
         /// 画像ファイルをビューアで開くコマンド
         /// </summary>
-        public ICommand ImagePreviewCommand { get; }
+        public ICommand PreviewImageCommand { get; }
 
         /// <summary>
         /// 画像判別済
@@ -56,7 +56,7 @@ namespace DragAndDrop.Model
             this.ImageFilePath = imageFilePath;
             this.ImageGuid = Guid.NewGuid();
 
-            this.ImagePreviewCommand = new DelegateCommand(() =>
+            this.PreviewImageCommand = new DelegateCommand(() =>
             {
                 Process.Start(this.ImageFilePath);
             });
