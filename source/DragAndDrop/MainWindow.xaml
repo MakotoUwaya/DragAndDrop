@@ -7,11 +7,13 @@
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:local="clr-namespace:DragAndDrop"
                       xmlns:loadin="clr-namespace:LoadingIndicators.WPF;assembly=LoadingIndicators.WPF"
-                      mc:Ignorable="d"                      
+                      xmlns:model="clr-namespace:DragAndDrop.Model"
+                      mc:Ignorable="d"
                       ShowIconOnTitleBar="True" SaveWindowPosition="True"
                       GlowBrush="{DynamicResource AccentColorBrush}"
-                      ResizeMode="CanResizeWithGrip" AllowDrop="True" PreviewDragOver="MetroWindow_PreviewDragOver"  Drop="MetroWindow_Drop"          
-                      Title="Drag And Drop" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+                      ResizeMode="CanResizeWithGrip" AllowDrop="True" PreviewDragOver="MetroWindow_PreviewDragOver" Drop="MetroWindow_Drop"
+                      Title="Drag And Drop" Height="600" Width="800" WindowStartupLocation="CenterScreen"
+                      x:ClassModifier="internal">
 
     <controls:MetroWindow.DataContext>
         <local:MainWindowViewModel />
@@ -42,7 +44,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Path=TabItems}">
+        <TabControl Grid.Column="0" Grid.Row="0">
             <TabItem Header="ImageViewer">
                 <ListBox ItemsSource="{Binding Path=ImageCards, Mode=OneWay}">
                     <ListBox.ItemsPanel>
@@ -51,8 +53,8 @@
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
 
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
+                    <ListBox.Resources>
+                        <DataTemplate DataType="{x:Type model:ImageCard}">
                             <materialDesign:Card Width="300" Margin="3" >
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -61,7 +63,7 @@
                                     </Grid.RowDefinitions>
 
                                     <Button Grid.Row="0"
-                                            Command="{Binding Path=ImagePreviewCommand, Mode=OneTime}" 
+                                            Command="{Binding Path=PreviewImageCommand, Mode=OneTime}" 
                                             Padding="0" Height="330" Width="296" 
                                             HorizontalAlignment="Center" VerticalAlignment="Center" >
                                         <Image Source="{Binding Path=ImageFilePath, Mode=OneTime}" Stretch="UniformToFill" />
@@ -69,7 +71,7 @@
                                     <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="5,0,0,0">
                                         <TextBlock TextWrapping="Wrap" FontWeight="Bold" Text="{Binding Path=ImageGuid, Mode=OneTime}" />
                                         <TextBlock FontWeight="Bold" Text="{Binding Path=AutoCategory, Mode=OneWay}" />
-                                        <TextBlock FontWeight="Bold" Text="{Binding Path=ManualCategory, Mode=TwoWay}" />
+                                        <TextBox FontWeight="Bold" Text="{Binding Path=ManualCategory, Mode=TwoWay}" />
                                     </StackPanel>
                                     <StackPanel HorizontalAlignment="Right" Grid.Row="1" Orientation="Horizontal" Margin="8">
                                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
@@ -83,7 +85,18 @@
                                 </Grid>
                             </materialDesign:Card>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type model:AddImageButtonCard}">
+                            <materialDesign:Card HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                                 Height="260" Width="300" Margin="3">
+                                <Button Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                                        Command="{Binding Path=AddImageCommand, Mode=OneTime}"
+                                        CommandParameter="{Binding DataContext, 
+                                                    RelativeSource={RelativeSource FindAncestor, AncestorLevel=4, AncestorType={x:Type Grid}}}">
+                                    <materialDesign:PackIcon Height="30" Width="30" Kind="PlusCircleOutline" />
+                                </Button>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ListBox.Resources>
                 </ListBox>
             </TabItem>
         </TabControl>
