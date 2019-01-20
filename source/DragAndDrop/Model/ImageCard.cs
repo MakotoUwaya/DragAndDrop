@@ -3,28 +3,39 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
 using Prism.Commands;
+using Prism.Mvvm;
 
 namespace DragAndDrop.Model
 {
     /// <summary>
     /// カードに画像を表示するためのクラス
     /// </summary>
-    public class ImageCard : IImageCard
+    public class ImageCard : BindableBase, IImageCard
     {
         /// <summary>
         /// 画像ファイルパス
         /// </summary>
         public string ImageFilePath { get; }
 
+        private string autoCategory;
         /// <summary>
         /// 自動設定された画像カテゴリ
         /// </summary>
-        public string AutoCategory { get; set; }
+        public string AutoCategory
+        {
+            get => this.autoCategory;
+            set => this.SetProperty(ref this.autoCategory, value);
+        }
 
+        private string manualCategory;
         /// <summary>
         /// 手動設定された画像カテゴリ
         /// </summary>
-        public string ManualCategory { get; set; }
+        public string ManualCategory
+        {
+            get => this.manualCategory;
+            set => this.SetProperty(ref this.manualCategory, value);
+        }
 
         /// <summary>
         /// 画像ID
@@ -36,11 +47,16 @@ namespace DragAndDrop.Model
         /// </summary>
         public ICommand PreviewImageCommand { get; }
 
+        private bool isChecked;
         /// <summary>
         /// 画像判別済
         /// TODO: 2018-10-25 makoto.uwaya Undefined
         /// </summary>
-        public bool IsChecked { get; set; }
+        public bool IsChecked
+        {
+            get => this.isChecked;
+            set => this.SetProperty(ref this.isChecked, value);
+        }
 
         /// <summary>
         /// コンストラクタ
