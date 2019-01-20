@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -27,6 +29,14 @@ namespace DragAndDrop.Model
             {
                 throw new WebException(response.ReasonPhrase);
             }
+
+            // TODO: makoto.uwaya 2019-01-21 画像判別結果を反映
+            var result = await response.Content.ReadAsStringAsync();
+            imageCards.ToList().ForEach(c => 
+            {
+                c.IsChecked = true;
+                c.AutoCategory = "画像のカテゴリを取得！";
+            });
         }
 
         private static MultipartFormDataContent CreateContent(IEnumerable<IImageCard> imageCards)
@@ -34,7 +44,7 @@ namespace DragAndDrop.Model
             var content = new MultipartFormDataContent();
             foreach (var imageCard in imageCards)
             {
-                var fileContent = new StreamContent(File.OpenRead(imageCard.ImageFilePath));
+                var fileContent = new StreamContent(ImageEditor.SquareClipFromImageFile(imageCard.ImageFilePath));
                 fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
                     Name = ConsumerKeyString,
@@ -46,7 +56,6 @@ namespace DragAndDrop.Model
                 };
 
                 content.Add(fileContent);
-                imageCard.IsChecked = true;
             }
             return content;
         }

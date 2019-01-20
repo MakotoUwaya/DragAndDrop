@@ -14,6 +14,11 @@ namespace DragAndDrop.Model
 
         public string ImageFilePath => string.Empty;
 
+        public string AutoCategory {
+            get => string.Empty;
+            set { }
+        }
+
         public bool IsChecked
         {
             get => true;

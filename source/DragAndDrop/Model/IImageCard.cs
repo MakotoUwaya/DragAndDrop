@@ -9,5 +9,7 @@ namespace DragAndDrop.Model
         string ImageFilePath { get; }
 
         bool IsChecked { get; set; }
+
+        string AutoCategory { get; set; }
     }
 }
