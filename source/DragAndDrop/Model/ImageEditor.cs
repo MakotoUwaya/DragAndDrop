@@ -10,6 +10,8 @@ namespace DragAndDrop.Model
     /// </summary>
     public class ImageEditor
     {
+        private static readonly int ImageLength = 224; 
+
         /// <summary>
         /// 画像をクリッピングする
         /// </summary>
@@ -21,7 +23,7 @@ namespace DragAndDrop.Model
             {
                 var lengthOfOneSide = Math.Min(image.Width, image.Height);
 
-                using (var canvas = new Bitmap(lengthOfOneSide, lengthOfOneSide))
+                using (var canvas = new Bitmap(ImageLength, ImageLength))
                 using (var graphics = Graphics.FromImage(canvas))
                 {
                     // 切取範囲
@@ -29,7 +31,7 @@ namespace DragAndDrop.Model
                     var positionY = image.Height == lengthOfOneSide ? 0 : (image.Height - lengthOfOneSide) / 2;
                     var srcRect = new Rectangle(positionX, positionY, lengthOfOneSide, lengthOfOneSide);
                     // 描画範囲
-                    var desRect = new Rectangle(0, 0, lengthOfOneSide, lengthOfOneSide);
+                    var desRect = new Rectangle(0, 0, ImageLength, ImageLength);
                     graphics.DrawImage(image, desRect, srcRect, GraphicsUnit.Pixel);
 
                     var ms = new MemoryStream();
