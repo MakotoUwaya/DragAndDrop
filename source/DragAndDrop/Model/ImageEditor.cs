@@ -17,7 +17,7 @@ namespace DragAndDrop.Model
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static Stream SquareClipFromImageFile(string filePath)
+        public static MemoryStream SquareClipFromImageFile(string filePath)
         {
             using (var image = new Bitmap(filePath))
             {
@@ -35,11 +35,11 @@ namespace DragAndDrop.Model
                     graphics.DrawImage(image, desRect, srcRect, GraphicsUnit.Pixel);
 
                     var ms = new MemoryStream();
-                    canvas.Save(ms, ImageFormat.Png);
+                    canvas.Save(ms, ImageFormat.Jpeg);
                     ms.Seek(0, SeekOrigin.Begin);
 
 #if DEBUG
-                    using (var file = new FileStream("file.png", FileMode.OpenOrCreate, FileAccess.Write))
+                    using (var file = new FileStream("file.jpg", FileMode.OpenOrCreate, FileAccess.Write))
                     {
                         var bytes = new byte[ms.Length];
                         ms.Read(bytes, 0, (int)ms.Length);

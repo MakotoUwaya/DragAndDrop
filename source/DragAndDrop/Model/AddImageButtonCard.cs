@@ -25,6 +25,12 @@ namespace DragAndDrop.Model
             set {}
         }
 
+        public string Time
+        {
+            get => string.Empty;
+            set { }
+        }
+
         /// <summary>
         /// 画像ファイルを追加するコマンド
         /// </summary>

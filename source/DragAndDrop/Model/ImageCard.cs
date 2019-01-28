@@ -37,6 +37,16 @@ namespace DragAndDrop.Model
             set => this.SetProperty(ref this.manualCategory, value);
         }
 
+        private string time;
+        /// <summary>
+        /// 自動設定された画像カテゴリ
+        /// </summary>
+        public string Time
+        {
+            get => this.time;
+            set => this.SetProperty(ref this.time, value);
+        }
+
         /// <summary>
         /// 画像ID
         /// </summary>

@@ -11,5 +11,7 @@ namespace DragAndDrop.Model
         bool IsChecked { get; set; }
 
         string AutoCategory { get; set; }
+
+        string Time { get; set; }
     }
 }
