@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -23,27 +22,26 @@ namespace DragAndDrop.Model
         /// <param name="imageCards">判定する画像のリスト</param>
         internal static async Task Determinate(IEnumerable<IImageCard> imageCards)
         {
-            var timer = System.Diagnostics.Stopwatch.StartNew();
-
-            var client = new HttpClient();
-            var content = new ByteArrayContent(CreateStreamContent(imageCards.First().ImageFilePath));
-            content.Headers.ContentType = new MediaTypeHeaderValue(@"image/jpg");
-            var elapsedImageCreate = $"Content: {timer.ElapsedMilliseconds:#,0}";
-
-            var response = await client.PostAsync(Properties.Settings.Default.ImageDeterminationUrl, content); 
-            if (!response.IsSuccessStatusCode)
+            foreach (var imageCard in imageCards)
             {
-                throw new WebException(response.ReasonPhrase);
+                var timer = System.Diagnostics.Stopwatch.StartNew();
+
+                var client = new HttpClient();
+                var content = new ByteArrayContent(CreateStreamContent(imageCard.ImageFilePath));
+                content.Headers.ContentType = new MediaTypeHeaderValue(@"image/jpg");
+                var elapsedImageCreate = $"Content: {timer.ElapsedMilliseconds:#,0}";
+
+                var response = await client.PostAsync(Properties.Settings.Default.ImageDeterminationUrl, content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new WebException(response.ReasonPhrase);
+                }
+
+                var result = DynamicJson.Parse(await response.Content.ReadAsStringAsync());
+                imageCard.IsChecked = true;
+                imageCard.AutoCategory = $"prediction_index: {result.prediction_index}\nprobability: {result.probability}";
+                imageCard.Time = $"{elapsedImageCreate} Network: {timer.ElapsedMilliseconds:#,0}";
             }
-
-            // TODO: makoto.uwaya 2019-01-21 画像判別結果を反映
-            var result = DynamicJson.Parse(await response.Content.ReadAsStringAsync());
-            imageCards.Take(1).ToList().ForEach(c => 
-            {
-                c.IsChecked = true;
-                c.AutoCategory = $"prediction_index: {result.prediction_index}\nprobability: {result.probability:#,0.00}";
-                c.Time = $"{elapsedImageCreate} Network: {timer.ElapsedMilliseconds:#,0}";
-            });
         }
 
         private static byte[] CreateStreamContent(string imageFilePath)
