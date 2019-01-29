@@ -62,7 +62,7 @@ namespace DragAndDrop.Model
                 try
                 {
                     await vm.AddImageCards(dialog.FileNames);
-                    await ImageDetermination.Determinate(vm.ImageCards.Where(c => !c.IsChecked));
+                    ImageDetermination.Determinate(vm.ImageCards.Where(c => !c.IsChecked));
 
                 }
                 catch (Exception exception)

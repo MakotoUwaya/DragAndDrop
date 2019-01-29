@@ -20,28 +20,31 @@ namespace DragAndDrop.Model
         /// 判定処理
         /// </summary>
         /// <param name="imageCards">判定する画像のリスト</param>
-        internal static async Task Determinate(IEnumerable<IImageCard> imageCards)
+        internal static void Determinate(IEnumerable<IImageCard> imageCards)
         {
-            foreach (var imageCard in imageCards)
+            Task.Run(() =>
             {
-                var timer = System.Diagnostics.Stopwatch.StartNew();
-
-                var client = new HttpClient();
-                var content = new ByteArrayContent(CreateStreamContent(imageCard.ImageFilePath));
-                content.Headers.ContentType = new MediaTypeHeaderValue(@"image/jpg");
-                var elapsedImageCreate = $"Content: {timer.ElapsedMilliseconds:#,0}";
-
-                var response = await client.PostAsync(Properties.Settings.Default.ImageDeterminationUrl, content);
-                if (!response.IsSuccessStatusCode)
+                Parallel.ForEach(imageCards, async imageCard =>
                 {
-                    throw new WebException(response.ReasonPhrase);
-                }
+                    var timer = System.Diagnostics.Stopwatch.StartNew();
 
-                var result = DynamicJson.Parse(await response.Content.ReadAsStringAsync());
-                imageCard.IsChecked = true;
-                imageCard.AutoCategory = $"prediction_index: {result.prediction_index}\nprobability: {result.probability}";
-                imageCard.Time = $"{elapsedImageCreate} Network: {timer.ElapsedMilliseconds:#,0}";
-            }
+                    var client = new HttpClient();
+                    var content = new ByteArrayContent(CreateStreamContent(imageCard.ImageFilePath));
+                    content.Headers.ContentType = new MediaTypeHeaderValue(@"image/jpg");
+                    var elapsedImageCreate = $"Content: {timer.ElapsedMilliseconds:#,0}";
+
+                    var response = await client.PostAsync(Properties.Settings.Default.ImageDeterminationUrl, content);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new WebException(response.ReasonPhrase);
+                    }
+
+                    var result = DynamicJson.Parse(await response.Content.ReadAsStringAsync());
+                    imageCard.IsChecked = true;
+                    imageCard.AutoCategory = $"prediction_index: {result.prediction_index}\nprobability: {result.probability}";
+                    imageCard.Time = $"{elapsedImageCreate} Network: {timer.ElapsedMilliseconds:#,0}";
+                });
+            });
         }
 
         private static byte[] CreateStreamContent(string imageFilePath)
