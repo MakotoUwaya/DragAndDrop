@@ -3,21 +3,18 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:prism="http://prismlibrary.com/"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-                      xmlns:local="clr-namespace:DragAndDrop"
                       xmlns:loadin="clr-namespace:LoadingIndicators.WPF;assembly=LoadingIndicators.WPF"
                       xmlns:model="clr-namespace:DragAndDrop.Model"
                       mc:Ignorable="d"
+                      prism:ViewModelLocator.AutoWireViewModel="True"
                       ShowIconOnTitleBar="True" SaveWindowPosition="True"
                       GlowBrush="{DynamicResource AccentColorBrush}"
                       ResizeMode="CanResizeWithGrip" AllowDrop="True" PreviewDragOver="MetroWindow_PreviewDragOver" Drop="MetroWindow_Drop"
                       Title="Drag And Drop" Height="600" Width="800" WindowStartupLocation="CenterScreen"
                       x:ClassModifier="internal">
-
-    <controls:MetroWindow.DataContext>
-        <local:MainWindowViewModel />
-    </controls:MetroWindow.DataContext>
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
