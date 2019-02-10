@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Codeplex.Data;
+using Interfaces;
 
 namespace DragAndDrop.Model
 {
@@ -16,11 +14,22 @@ namespace DragAndDrop.Model
 
         private const string ConsumerKeyString = "gclass_client";
 
+        private readonly IDeterminator _determinator;
+
+        /// <summary>
+        /// Constractor
+        /// </summary>
+        /// <param name="determinator">判別処理の実装</param>
+        public ImageDetermination(IDeterminator determinator)
+        {
+            this._determinator = determinator;
+        }
+
         /// <summary>
         /// 判定処理
         /// </summary>
         /// <param name="imageCards">判定する画像のリスト</param>
-        internal static void Determinate(IEnumerable<IImageCard> imageCards)
+        internal void Determinate(IEnumerable<IImageCard> imageCards)
         {
             Task.Run(() =>
             {
@@ -28,49 +37,18 @@ namespace DragAndDrop.Model
                 {
                     var timer = System.Diagnostics.Stopwatch.StartNew();
 
-                    var client = new HttpClient();
-                    var content = new ByteArrayContent(CreateStreamContent(imageCard.ImageFilePath));
-                    content.Headers.ContentType = new MediaTypeHeaderValue(@"image/jpg");
-                    var elapsedImageCreate = $"Content: {timer.ElapsedMilliseconds:#,0}";
+                    var resultString = await this._determinator.Determinate(
+                        new Uri(Properties.Settings.Default.ImageDeterminationUrl),
+                        imageCard.ImageFilePath,
+                        ConsumerKeyString
+                    );
 
-                    var response = await client.PostAsync(Properties.Settings.Default.ImageDeterminationUrl, content);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        throw new WebException(response.ReasonPhrase);
-                    }
-
-                    var result = DynamicJson.Parse(await response.Content.ReadAsStringAsync());
+                    var result = DynamicJson.Parse(resultString);
                     imageCard.IsChecked = true;
                     imageCard.AutoCategory = $"prediction_index: {result.prediction_index}\nprobability: {result.probability}";
-                    imageCard.Time = $"{elapsedImageCreate} Network: {timer.ElapsedMilliseconds:#,0}";
+                    imageCard.Time = $"Determinate time: {timer.ElapsedMilliseconds:#,0}";
                 });
             });
-        }
-
-        private static byte[] CreateStreamContent(string imageFilePath)
-        {
-             return ImageEditor.SquareClipFromImageFile(imageFilePath).ToArray();
-        }
-
-        private static MultipartFormDataContent CreateContent(IEnumerable<IImageCard> imageCards)
-        {
-            var content = new MultipartFormDataContent();
-            foreach (var imageCard in imageCards)
-            {
-                var fileContent = new StreamContent(ImageEditor.SquareClipFromImageFile(imageCard.ImageFilePath));
-                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    Name = ConsumerKeyString,
-                    FileName = Path.GetFileName(imageCard.ImageFilePath),
-                    Parameters =
-                    {
-                        new NameValueHeaderValue("fileguid", imageCard.ImageGuid.ToString()),
-                    },
-                };
-
-                content.Add(fileContent);
-            }
-            return content;
         }
     }
 }

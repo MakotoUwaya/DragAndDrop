@@ -3,14 +3,14 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace DragAndDrop.Model
+namespace AWSDriver
 {
     /// <summary>
     /// 画像加工
     /// </summary>
     public class ImageEditor
     {
-        private static readonly int ImageLength = 224; 
+        private static readonly int ImageLength = 224;
 
         /// <summary>
         /// 画像をクリッピングする
@@ -37,19 +37,25 @@ namespace DragAndDrop.Model
                     var ms = new MemoryStream();
                     canvas.Save(ms, ImageFormat.Jpeg);
                     ms.Seek(0, SeekOrigin.Begin);
-
 #if DEBUG
-                    using (var file = new FileStream("file.jpg", FileMode.OpenOrCreate, FileAccess.Write))
+                    try
                     {
-                        var bytes = new byte[ms.Length];
-                        ms.Read(bytes, 0, (int)ms.Length);
-                        file.Write(bytes, 0, bytes.Length);
+                        using (var file = new FileStream("file.jpg", FileMode.OpenOrCreate, FileAccess.Write))
+                        {
+                            var bytes = new byte[ms.Length];
+                            ms.Read(bytes, 0, (int)ms.Length);
+                            file.Write(bytes, 0, bytes.Length);
+                        }
+                        ms.Seek(0, SeekOrigin.Begin);
                     }
-                    ms.Seek(0, SeekOrigin.Begin);
+                    catch (IOException ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"{ex.Message}\n{ex.StackTrace}");
+                    }
 #endif
                     return ms;
                 }
-            }          
+            }
         }
     }
 }

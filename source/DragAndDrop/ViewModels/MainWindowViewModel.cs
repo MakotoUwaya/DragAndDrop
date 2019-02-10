@@ -10,8 +10,10 @@ using Prism.Commands;
 using Prism.Mvvm;
 
 using DragAndDrop.Model;
+using DragAndDrop.Views;
+using Interfaces;
 
-namespace DragAndDrop
+namespace DragAndDrop.ViewModels
 {
     /// <summary>
     /// メインウィンドウ
@@ -75,17 +77,17 @@ namespace DragAndDrop
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MainWindowViewModel()
+        public MainWindowViewModel(IDeterminator determinator)
         {
             this.StartTimer();
             this.ImageCards = new ObservableCollection<IImageCard>();
             BindingOperations.EnableCollectionSynchronization(this.ImageCards, new object());
-            this.ImageCards.Add(new AddImageButtonCard());
+            this.ImageCards.Add(new AddImageButtonCard(determinator));
 
             // 設定画面を開く処理
             this.SettingCommand = new DelegateCommand(() =>
             {
-                var dialog = new Functions.Setting.SettingDialog
+                var dialog = new SettingDialog
                 {
                     Owner = System.Windows.Application.Current.MainWindow
                 };

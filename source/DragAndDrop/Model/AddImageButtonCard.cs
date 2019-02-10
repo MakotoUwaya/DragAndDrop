@@ -6,6 +6,9 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using Prism.Commands;
 
+using DragAndDrop.ViewModels;
+using Interfaces;
+
 namespace DragAndDrop.Model
 {
     internal class AddImageButtonCard : IImageCard
@@ -13,6 +16,8 @@ namespace DragAndDrop.Model
         public Guid ImageGuid => Guid.Empty;
 
         public string ImageFilePath => string.Empty;
+
+        private readonly ImageDetermination imageDetermination;
 
         public string AutoCategory {
             get => string.Empty;
@@ -36,8 +41,10 @@ namespace DragAndDrop.Model
         /// </summary>
         public ICommand AddImageCommand { get; }
 
-        public AddImageButtonCard()
+        public AddImageButtonCard(IDeterminator determinator)
         {
+            this.imageDetermination = new ImageDetermination(determinator);
+
             this.AddImageCommand = new DelegateCommand<object>(async obj =>
             {
 
@@ -62,8 +69,7 @@ namespace DragAndDrop.Model
                 try
                 {
                     await vm.AddImageCards(dialog.FileNames);
-                    ImageDetermination.Determinate(vm.ImageCards.Where(c => !c.IsChecked));
-
+                    this.imageDetermination.Determinate(vm.ImageCards.Where(c => !c.IsChecked));
                 }
                 catch (Exception exception)
                 {

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DragAndDrop.Model
+namespace Interfaces
 {
-    internal interface IImageCard
+    public interface IImageCard
     {
         Guid ImageGuid { get; }
 

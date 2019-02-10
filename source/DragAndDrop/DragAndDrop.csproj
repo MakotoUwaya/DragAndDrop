@@ -149,10 +149,8 @@
     </Compile>
     <Compile Include="Functions\Setting\SettingDialogViewModel.cs" />
     <Compile Include="Model\AddImageButtonCard.cs" />
-    <Compile Include="Model\IImageCard.cs" />
     <Compile Include="Model\ImageCard.cs" />
     <Compile Include="Model\ImageDetermination.cs" />
-    <Compile Include="Model\ImageEditor.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RelayCommand.generic.cs" />
     <Compile Include="WindowManager.cs" />
@@ -233,7 +231,20 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AWSDriver\AWSDriver.csproj">
+      <Project>{8f52bdc7-8800-415b-9e0e-4293d81e6d0f}</Project>
+      <Name>AWSDriver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoogleVisionDriver\GoogleVisionDriver.csproj">
+      <Project>{253e490f-ec4d-4655-8082-49120be63ed9}</Project>
+      <Name>GoogleVisionDriver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
+      <Project>{6bbb70cb-5ae4-4a66-8a42-0e47fa75d33a}</Project>
+      <Name>Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

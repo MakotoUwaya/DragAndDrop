@@ -5,6 +5,8 @@ using System.Windows.Input;
 using Prism.Commands;
 using Prism.Mvvm;
 
+using Interfaces;
+
 namespace DragAndDrop.Model
 {
     /// <summary>
