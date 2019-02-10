@@ -22,6 +22,9 @@ using System.Xml.Linq;
 
 namespace Codeplex.Data
 {
+    /// <summary>
+    /// Json text to object
+    /// </summary>
     public class DynamicJson : DynamicObject
     {
         private enum JsonType
@@ -160,7 +163,7 @@ namespace Codeplex.Data
         {
             return obj.GetType()
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Select(pi => new { Name = pi.Name, Value = pi.GetValue(obj, null) })
+                .Select(pi => new { pi.Name, Value = pi.GetValue(obj, null) })
                 .Select(a => new XStreamingElement(a.Name, CreateTypeAttr(GetJsonType(a.Value)), CreateJsonNode(a.Value)));
         }
 
@@ -183,20 +186,22 @@ namespace Codeplex.Data
         /// <summary>create blank JSObject</summary>
         public DynamicJson()
         {
-			this.xml = new XElement("root", CreateTypeAttr(JsonType.@object));
-			this.jsonType = JsonType.@object;
+            this.xml = new XElement("root", CreateTypeAttr(JsonType.@object));
+            this.jsonType = JsonType.@object;
         }
 
         private DynamicJson(XElement element, JsonType type)
         {
             Debug.Assert(type == JsonType.array || type == JsonType.@object);
 
-			this.xml = element;
-			this.jsonType = type;
+            this.xml = element;
+            this.jsonType = type;
         }
 
+        /// <summary>JsonType is object</summary>
         public bool IsObject { get { return this.jsonType == JsonType.@object; } }
 
+        /// <summary>JsonType is array</summary>
         public bool IsArray { get { return this.jsonType == JsonType.array; } }
 
         /// <summary>has property or not</summary>
@@ -264,8 +269,7 @@ namespace Codeplex.Data
                 .ToDictionary(pi => pi.Name, pi => pi);
             foreach (var item in this.xml.Elements())
             {
-                PropertyInfo propertyInfo;
-                if (!dict.TryGetValue(item.Name.LocalName, out propertyInfo)) continue;
+                if (!dict.TryGetValue(item.Name.LocalName, out var propertyInfo)) continue;
                 var value = this.DeserializeValue(item, propertyInfo.PropertyType);
                 propertyInfo.SetValue(result, value, null);
             }
@@ -297,7 +301,7 @@ namespace Codeplex.Data
             }
         }
 
-        // Delete
+        /// <summary>Delete</summary>
         public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
         {
             result = (this.IsArray)
@@ -306,7 +310,7 @@ namespace Codeplex.Data
             return true;
         }
 
-        // IsDefined, if has args then TryGetMember
+        /// <summary>IsDefined, if has args then TryGetMember</summary>
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
             if (args.Length > 0)
@@ -319,7 +323,7 @@ namespace Codeplex.Data
             return true;
         }
 
-        // Deserialize or foreach(IEnumerable)
+        /// <summary>Deserialize or foreach(IEnumerable)</summary>
         public override bool TryConvert(ConvertBinder binder, out object result)
         {
             if (binder.Type == typeof(IEnumerable) || binder.Type == typeof(object[]))
@@ -348,6 +352,7 @@ namespace Codeplex.Data
             return true;
         }
 
+        /// <summary>get index</summary>
         public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
         {
             return (this.IsArray)
@@ -355,6 +360,7 @@ namespace Codeplex.Data
                 : this.TryGet(this.xml.Element((string)indexes[0]), out result);
         }
 
+        /// <summary>get member</summary>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             return (this.IsArray)
@@ -368,7 +374,7 @@ namespace Codeplex.Data
             var element = this.xml.Element(name);
             if (element == null)
             {
-				this.xml.Add(new XElement(name, CreateTypeAttr(type), CreateJsonNode(value)));
+                this.xml.Add(new XElement(name, CreateTypeAttr(type), CreateJsonNode(value)));
             }
             else
             {
@@ -385,7 +391,7 @@ namespace Codeplex.Data
             var e = this.xml.Elements().ElementAtOrDefault(index);
             if (e == null)
             {
-				this.xml.Add(new XElement("item", CreateTypeAttr(type), CreateJsonNode(value)));
+                this.xml.Add(new XElement("item", CreateTypeAttr(type), CreateJsonNode(value)));
             }
             else
             {
@@ -396,6 +402,7 @@ namespace Codeplex.Data
             return true;
         }
 
+        /// <summary>set index</summary>
         public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value)
         {
             return (this.IsArray)
@@ -403,6 +410,7 @@ namespace Codeplex.Data
                 : this.TrySet((string)indexes[0], value);
         }
 
+        /// <summary>set member</summary>
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
             return (this.IsArray)
@@ -410,6 +418,7 @@ namespace Codeplex.Data
                 : this.TrySet(binder.Name, value);
         }
 
+        /// <summary>get dynamic member names</summary>
         public override IEnumerable<string> GetDynamicMemberNames()
         {
             return (this.IsArray)
