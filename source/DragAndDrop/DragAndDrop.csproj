@@ -144,10 +144,10 @@
     <Compile Include="Behaviors\CloseWindowAttached.cs" />
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
     <Compile Include="DynamicJson.cs" />
-    <Compile Include="Functions\Setting\SettingDialog.xaml.cs">
+    <Compile Include="Views\SettingDialog.xaml.cs">
       <DependentUpon>SettingDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Functions\Setting\SettingDialogViewModel.cs" />
+    <Compile Include="ViewModels\SettingDialogViewModel.cs" />
     <Compile Include="Model\AddImageButtonCard.cs" />
     <Compile Include="Model\ImageCard.cs" />
     <Compile Include="Model\ImageDetermination.cs" />
@@ -180,7 +180,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Functions\Setting\SettingDialog.xaml">
+    <Page Include="Views\SettingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

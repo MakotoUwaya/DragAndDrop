@@ -1,4 +1,4 @@
-﻿namespace DragAndDrop.Functions.Setting
+﻿namespace DragAndDrop.Views
 {
     /// <summary>
     /// SettingDialog.xaml の相互作用ロジック

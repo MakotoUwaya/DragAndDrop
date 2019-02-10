@@ -1,8 +1,7 @@
-﻿using System;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using Prism.Commands;
 
-namespace DragAndDrop.Functions.Setting
+namespace DragAndDrop.ViewModels
 {
     /// <summary>
     /// 設定ダイアログ ViewModel
