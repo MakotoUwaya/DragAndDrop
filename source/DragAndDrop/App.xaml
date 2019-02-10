@@ -25,13 +25,6 @@
                 <!-- Icon Resources -->
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
 
-                <!-- LoadingIndicators.WPF -->
-                <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingWave.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingThreeDots.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingFlipPlane.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingPulse.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingDoubleBounce.xaml"/>
-
              </ResourceDictionary.MergedDictionaries>
 
             <!-- MahApps Brushes -->

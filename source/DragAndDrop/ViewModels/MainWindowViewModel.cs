@@ -78,7 +78,6 @@ namespace DragAndDrop
         public MainWindowViewModel()
         {
             this.StartTimer();
-            this.IsBusy = true;
             this.ImageCards = new ObservableCollection<IImageCard>();
             BindingOperations.EnableCollectionSynchronization(this.ImageCards, new object());
             this.ImageCards.Add(new AddImageButtonCard());
