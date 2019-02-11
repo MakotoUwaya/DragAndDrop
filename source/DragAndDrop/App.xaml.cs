@@ -15,6 +15,11 @@ namespace DragAndDrop
     public partial class Application : PrismApplication
     {
         /// <summary>
+        /// Main content region
+        /// </summary>
+        public static readonly string MainContent = "MainContent";
+
+        /// <summary>
         /// Startup window
         /// </summary>
         /// <returns></returns>

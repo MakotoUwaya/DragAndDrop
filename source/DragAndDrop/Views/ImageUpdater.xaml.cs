@@ -1,14 +1,14 @@
 ﻿namespace DragAndDrop.Views
 {
     /// <summary>
-    /// MainWindow.xaml の相互作用ロジック
+    /// Interaction logic for ImageView.xaml
     /// </summary>
-    internal partial class MainWindow
+    public partial class ImageUpdater
     {
         /// <summary>
-        /// コンストラクタ
+        /// Image updator
         /// </summary>
-        public MainWindow()
+        public ImageUpdater()
         {
             this.InitializeComponent();
         }

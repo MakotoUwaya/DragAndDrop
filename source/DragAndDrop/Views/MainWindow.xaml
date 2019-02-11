@@ -4,14 +4,13 @@
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:prism="http://prismlibrary.com/"
-                      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-                      xmlns:model="clr-namespace:DragAndDrop.Model"
+                      xmlns:view="clr-namespace:DragAndDrop.Views"
                       mc:Ignorable="d"
                       prism:ViewModelLocator.AutoWireViewModel="True"
                       ShowIconOnTitleBar="True" SaveWindowPosition="True"
                       GlowBrush="{DynamicResource AccentColorBrush}"
-                      ResizeMode="CanResizeWithGrip" AllowDrop="True" PreviewDragOver="MetroWindow_PreviewDragOver" Drop="MetroWindow_Drop"
+                      ResizeMode="CanResizeWithGrip" AllowDrop="True"
                       Title="Drag And Drop" Height="600" Width="800" WindowStartupLocation="CenterScreen"
                       x:ClassModifier="internal">
 
@@ -36,70 +35,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Column="0" Grid.Row="0">
-            <TabItem Header="ImageViewer">
-                <ListBox ItemsSource="{Binding Path=ImageCards, Mode=OneWay}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
+        <view:ImageUpdater Grid.Row="0" />
 
-                    <ListBox.Resources>
-                        <DataTemplate DataType="{x:Type model:ImageCard}">
-                            <materialDesign:Card Width="300" Margin="3" >
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="200" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-
-                                    <Button Grid.Row="0"
-                                            Command="{Binding Path=PreviewImageCommand, Mode=OneTime}" 
-                                            Padding="0" Height="330" Width="296" 
-                                            HorizontalAlignment="Center" VerticalAlignment="Center" >
-                                        <Image Source="{Binding Path=ImageFilePath, Mode=OneTime}" Stretch="UniformToFill" />
-                                    </Button>
-                                    <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="5,0,0,0">
-                                        <!--<TextBlock TextWrapping="Wrap" FontWeight="Bold" Text="{Binding Path=ImageGuid, Mode=OneTime}" />-->
-                                        <TextBlock FontWeight="Bold" Text="{Binding Path=AutoCategory, Mode=OneWay}" />
-                                        <TextBlock FontWeight="Bold" Text="{Binding Path=Time, Mode=OneWay}" />
-                                        <TextBox FontWeight="Bold" Text="{Binding Path=ManualCategory, Mode=TwoWay}" />
-                                    </StackPanel>
-                                    <StackPanel HorizontalAlignment="Right" Grid.Row="1" Orientation="Horizontal" Margin="8">
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                Command="{Binding Path=DataContext.RemoveCardCommand, Mode=OneTime,
-                                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}"
-                                                CommandParameter="{Binding}"
-                                                materialDesign:RippleAssist.IsCentered="True">
-                                            <materialDesign:PackIcon Kind="Delete" />
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                            </materialDesign:Card>
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type model:AddImageButtonCard}">
-                            <materialDesign:Card HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                                 Height="260" Width="300" Margin="3">
-                                <Button Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
-                                        Command="{Binding Path=AddImageCommand, Mode=OneTime}"
-                                        CommandParameter="{Binding DataContext, 
-                                                    RelativeSource={RelativeSource FindAncestor, AncestorLevel=4, AncestorType={x:Type Grid}}}">
-                                    <materialDesign:PackIcon Height="30" Width="30" Kind="PlusCircleOutline" />
-                                </Button>
-                            </materialDesign:Card>
-                        </DataTemplate>
-                    </ListBox.Resources>
-                </ListBox>
-            </TabItem>
-        </TabControl>
-
-        <ProgressBar Grid.Column="0" Grid.Row="1" IsIndeterminate="{Binding Path=IsBusy, Mode=OneWay}" />
-
-        <StatusBar Grid.Column="0" Grid.Row="2" Name="BottomStatusBar" Height="Auto">
+        <StatusBar Grid.Row="1" Name="BottomStatusBar" Height="Auto">
             <Grid HorizontalAlignment="Stretch" Width="{Binding Path=ActualWidth, ElementName=BottomStatusBar, Mode=OneWay}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

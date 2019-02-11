@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Threading;
 using Prism.Commands;
 using Prism.Mvvm;
-
-using DragAndDrop.Model;
 using DragAndDrop.Views;
-using Interfaces;
 
 namespace DragAndDrop.ViewModels
 {
@@ -50,39 +42,16 @@ namespace DragAndDrop.ViewModels
         }
 
         /// <summary>
-        /// 画像イメージのコレクション
-        /// </summary>
-        public ObservableCollection<IImageCard> ImageCards { get; }
-
-        /// <summary>
         /// 設定コマンド
         /// </summary>
         public DelegateCommand SettingCommand { get; set; }
 
         /// <summary>
-        /// カード削除コマンド
-        /// </summary>
-        public DelegateCommand<IImageCard> RemoveCardCommand { get; set; }
-
-        private bool isBusy;
-        /// <summary>
-        /// 待機状態
-        /// </summary>
-        public bool IsBusy
-        {
-            get => this.isBusy;
-            set => this.SetProperty(ref this.isBusy, value);
-        }
-
-        /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MainWindowViewModel(IDeterminator determinator)
+        public MainWindowViewModel()
         {
             this.StartTimer();
-            this.ImageCards = new ObservableCollection<IImageCard>();
-            BindingOperations.EnableCollectionSynchronization(this.ImageCards, new object());
-            this.ImageCards.Add(new AddImageButtonCard(determinator));
 
             // 設定画面を開く処理
             this.SettingCommand = new DelegateCommand(() =>
@@ -93,17 +62,6 @@ namespace DragAndDrop.ViewModels
                 };
                 dialog.ShowDialog();
             });
-
-            this.RemoveCardCommand = new DelegateCommand<IImageCard>(c =>
-            {
-                var card = this.ImageCards.SingleOrDefault(ic => ic.ImageGuid == c.ImageGuid);
-                if (card == null)
-                {
-                    return;
-                }
-
-                this.ImageCards.Remove(card);
-            });
         }
 
         /// <summary>
@@ -112,32 +70,6 @@ namespace DragAndDrop.ViewModels
         private void CommandCanExecuteChanged()
         {
             this.SettingCommand.RaiseCanExecuteChanged();
-        }
-
-        /// <summary>
-        /// 画像カードを追加する
-        /// </summary>
-        /// <param name="imagePath">画像パス</param>
-        public async Task AddImageCards(string[] imagePath)
-        {
-            this.IsBusy = true;
-            foreach (var path in imagePath)
-            {
-                if (File.Exists(path))
-                {
-                    await Task.Run(() =>
-                    {
-                        var imageCard = new ImageCard(path);
-                        this.ImageCards.Insert(this.ImageCards.Count - 1, imageCard);
-                    });
-                }
-                else if (Directory.Exists(path))
-                {
-                    await this.AddImageCards(Directory.GetDirectories(path));
-                    await this.AddImageCards(Directory.GetFiles(path));
-                }
-            }
-            this.IsBusy = false;
         }
 
         /// <summary>

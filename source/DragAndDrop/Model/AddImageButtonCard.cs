@@ -48,7 +48,7 @@ namespace DragAndDrop.Model
             this.AddImageCommand = new DelegateCommand<object>(async obj =>
             {
 
-                if (!(obj is MainWindowViewModel vm))
+                if (!(obj is ImageUpdaterViewModel vm))
                 {
                     Debug.WriteLine($"Failed get ViewModel class. instead: {obj.GetType()}");
                     return;
