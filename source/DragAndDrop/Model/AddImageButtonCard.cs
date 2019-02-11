@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Prism.Commands;
+
+using DragAndDrop.ViewModels;
+using Interfaces;
 
 namespace DragAndDrop.Model
 {
@@ -25,6 +26,12 @@ namespace DragAndDrop.Model
             set {}
         }
 
+        public string Time
+        {
+            get => string.Empty;
+            set { }
+        }
+
         /// <summary>
         /// 画像ファイルを追加するコマンド
         /// </summary>
@@ -32,10 +39,9 @@ namespace DragAndDrop.Model
 
         public AddImageButtonCard()
         {
-            this.AddImageCommand = new DelegateCommand<object>(async obj =>
+            this.AddImageCommand = new DelegateCommand<object>(obj =>
             {
-
-                if (!(obj is MainWindowViewModel vm))
+                if (!(obj is ImageUpdaterViewModel vm))
                 {
                     Debug.WriteLine($"Failed get ViewModel class. instead: {obj.GetType()}");
                     return;
@@ -53,16 +59,7 @@ namespace DragAndDrop.Model
                     return;
                 }
 
-                try
-                {
-                    await vm.AddImageCards(dialog.FileNames);
-                    await ImageDetermination.Determinate(vm.ImageCards.Where(c => !c.IsChecked));
-
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
+                vm.AddImage(dialog.FileNames);
             });
         }
     }

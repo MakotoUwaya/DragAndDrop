@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Codeplex.Data;
+using Interfaces;
 
 namespace DragAndDrop.Model
 {
@@ -16,47 +14,38 @@ namespace DragAndDrop.Model
 
         private const string ConsumerKeyString = "gclass_client";
 
+        private readonly IDeterminator _determinator;
+
+        /// <summary>
+        /// Constractor
+        /// </summary>
+        /// <param name="determinator">判別処理の実装</param>
+        public ImageDetermination(IDeterminator determinator)
+        {
+            this._determinator = determinator;
+        }
+
         /// <summary>
         /// 判定処理
         /// </summary>
         /// <param name="imageCards">判定する画像のリスト</param>
-        internal static async Task Determinate(IEnumerable<IImageCard> imageCards)
+        internal void Determinate(IEnumerable<IImageCard> imageCards)
         {
-            var request = new HttpClient();
-            var response = await request.PostAsync(Properties.Settings.Default.ImageDeterminationUrl, CreateContent(imageCards));
-            if (!response.IsSuccessStatusCode)
+            Parallel.ForEach(imageCards, imageCard =>
             {
-                throw new WebException(response.ReasonPhrase);
-            }
+                var timer = System.Diagnostics.Stopwatch.StartNew();
 
-            // TODO: makoto.uwaya 2019-01-21 画像判別結果を反映
-            var result = await response.Content.ReadAsStringAsync();
-            imageCards.ToList().ForEach(c => 
-            {
-                c.IsChecked = true;
-                c.AutoCategory = "画像のカテゴリを取得！";
+                var resultString = this._determinator.Determinate(
+                    new Uri(Properties.Settings.Default.ImageDeterminationUrl),
+                    imageCard.ImageFilePath,
+                    ConsumerKeyString
+                ).Result;
+
+                var result = DynamicJson.Parse(resultString);
+                imageCard.IsChecked = true;
+                imageCard.AutoCategory = $"prediction_index: {result.prediction_index}\nprobability: {result.probability}";
+                imageCard.Time = $"Determinate time: {timer.ElapsedMilliseconds:#,0}";
             });
-        }
-
-        private static MultipartFormDataContent CreateContent(IEnumerable<IImageCard> imageCards)
-        {
-            var content = new MultipartFormDataContent();
-            foreach (var imageCard in imageCards)
-            {
-                var fileContent = new StreamContent(ImageEditor.SquareClipFromImageFile(imageCard.ImageFilePath));
-                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    Name = ConsumerKeyString,
-                    FileName = Path.GetFileName(imageCard.ImageFilePath),
-                    Parameters =
-                    {
-                        new NameValueHeaderValue("fileguid", imageCard.ImageGuid.ToString()),
-                    },
-                };
-
-                content.Add(fileContent);
-            }
-            return content;
         }
     }
 }

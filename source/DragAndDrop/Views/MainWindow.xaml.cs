@@ -1,14 +1,14 @@
-﻿namespace DragAndDrop.Functions.Setting
+﻿namespace DragAndDrop.Views
 {
     /// <summary>
-    /// SettingDialog.xaml の相互作用ロジック
+    /// MainWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class SettingDialog
+    internal partial class MainWindow
     {
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public SettingDialog()
+        public MainWindow()
         {
             this.InitializeComponent();
         }

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DragAndDrop.Model
+namespace Interfaces
 {
-    internal interface IImageCard
+    public interface IImageCard
     {
         Guid ImageGuid { get; }
 
@@ -11,5 +11,7 @@ namespace DragAndDrop.Model
         bool IsChecked { get; set; }
 
         string AutoCategory { get; set; }
+
+        string Time { get; set; }
     }
 }

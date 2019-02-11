@@ -1,14 +1,16 @@
-﻿using System;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using Prism.Commands;
+using DragAndDrop.Model;
 
-namespace DragAndDrop.Functions.Setting
+namespace DragAndDrop.ViewModels
 {
     /// <summary>
     /// 設定ダイアログ ViewModel
     /// </summary>
     public class SettingDialogViewModel : BindableBase
     {
+        private readonly Settings settings;
+
         private bool isWindowClosed;
         /// <summary>
         /// ウィンドウを閉じる
@@ -24,14 +26,32 @@ namespace DragAndDrop.Functions.Setting
         /// </summary>
         public string ImageDeterminationUrl
         {
-            get => Properties.Settings.Default.ImageDeterminationUrl;
+            get => this.settings.ImageDeterminationUrl;
             set
             {
-                Properties.Settings.Default.ImageDeterminationUrl = value;
-                Properties.Settings.Default.Save();
+                this.settings.ImageDeterminationUrl = value;
                 this.RaisePropertyChanged(nameof(this.ImageDeterminationUrl));
-            } 
+            }
         }
+
+        /// <summary>
+        /// 判定機の種類
+        /// </summary>
+        public DeterminatorType Determinator
+        {
+            get => this.settings.Determinator;
+            set
+            {
+                this.settings.Determinator = value;
+                this.RaisePropertyChanged(nameof(this.Determinator));
+                this.RaisePropertyChanged(nameof(this.IsUpdateDeterminator));
+            }
+        }
+
+        /// <summary>
+        /// When unmatch determinator settings is true
+        /// </summary>
+        public bool IsUpdateDeterminator => this.settings.IsUpdateDeterminator;
 
         /// <summary>
         /// 設定データの保存処理
@@ -53,12 +73,19 @@ namespace DragAndDrop.Functions.Setting
         /// </summary>
         public SettingDialogViewModel()
         {
+            this.settings = new Settings();
+            this.RaisePropertyChanged();
+
             this.SettingSaveCommand = new DelegateCommand(() => 
             {
+                this.settings.Save();
                 this.IsWindowClosed = true;
             });
 
-            this.SettingAcceptCommand = new DelegateCommand(() => { });
+            this.SettingAcceptCommand = new DelegateCommand(() => 
+            {
+                this.settings.Save();
+            });
 
             this.SettingCancelCommand = new DelegateCommand(() =>
             {
