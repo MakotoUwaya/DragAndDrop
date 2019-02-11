@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
-using DragAndDrop.Model;
 using Prism.Commands;
 using Prism.Mvvm;
 using GongSolutions.Wpf.DragDrop;
+using DragAndDrop.Model;
 using Interfaces;
 
 namespace DragAndDrop.ViewModels
@@ -45,10 +45,11 @@ namespace DragAndDrop.ViewModels
         /// </summary>
         public ImageUpdaterViewModel(IDeterminator determinator)
         {
-            this.ImageCards = new ObservableCollection<IImageCard>();
-            BindingOperations.EnableCollectionSynchronization(this.ImageCards, new object());
+            this.ImageCards = new ObservableCollection<IImageCard>
+            {
+                new AddImageButtonCard(),
+            };
             this.imageDetermination = new ImageDetermination(determinator);
-            this.ImageCards.Add(new AddImageButtonCard(determinator));
 
             this.RemoveCardCommand = new DelegateCommand<IImageCard>(c =>
             {
@@ -66,17 +67,13 @@ namespace DragAndDrop.ViewModels
         /// 画像カードを追加する
         /// </summary>
         /// <param name="imagePath">画像パス</param>
-        public async Task AddImageCards(string[] imagePath)
+        public async Task AddImageCards(IEnumerable<string> imagePath)
         {
             foreach (var path in imagePath)
             {
                 if (File.Exists(path))
                 {
-                    await Task.Run(() =>
-                    {
-                        var imageCard = new ImageCard(path);
-                        this.ImageCards.Insert(this.ImageCards.Count - 1, imageCard);
-                    });
+                   this.ImageCards.Insert(this.ImageCards.Count - 1, new ImageCard(path));
                 }
                 else if (Directory.Exists(path))
                 {
@@ -102,19 +99,29 @@ namespace DragAndDrop.ViewModels
         /// File drop on action
         /// </summary>
         /// <param name="dropInfo"></param>
-        public async void Drop(IDropInfo dropInfo)
+        public void Drop(IDropInfo dropInfo)
         {
             var data = (IDataObject)dropInfo.Data;
             if (!(data.GetData(DataFormats.FileDrop) is string[] files))
             {
                 return;
             }
+            this.AddImage(files);
+        }
 
+        /// <summary>
+        /// Add image
+        /// </summary>
+        public async void AddImage(IEnumerable<string> files)
+        {
             try
             {
                 this.IsBusy = true;
                 await this.AddImageCards(files);
-                this.imageDetermination.Determinate(this.ImageCards.Where(c => !c.IsChecked));
+                await Task.Run(() =>
+                {
+                    this.imageDetermination.Determinate(this.ImageCards.Where(c => !c.IsChecked));
+                });
             }
             catch (Exception exception)
             {

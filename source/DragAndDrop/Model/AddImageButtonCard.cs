@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Prism.Commands;
@@ -16,8 +14,6 @@ namespace DragAndDrop.Model
         public Guid ImageGuid => Guid.Empty;
 
         public string ImageFilePath => string.Empty;
-
-        private readonly ImageDetermination imageDetermination;
 
         public string AutoCategory {
             get => string.Empty;
@@ -41,13 +37,10 @@ namespace DragAndDrop.Model
         /// </summary>
         public ICommand AddImageCommand { get; }
 
-        public AddImageButtonCard(IDeterminator determinator)
+        public AddImageButtonCard()
         {
-            this.imageDetermination = new ImageDetermination(determinator);
-
-            this.AddImageCommand = new DelegateCommand<object>(async obj =>
+            this.AddImageCommand = new DelegateCommand<object>(obj =>
             {
-
                 if (!(obj is ImageUpdaterViewModel vm))
                 {
                     Debug.WriteLine($"Failed get ViewModel class. instead: {obj.GetType()}");
@@ -66,15 +59,7 @@ namespace DragAndDrop.Model
                     return;
                 }
 
-                try
-                {
-                    await vm.AddImageCards(dialog.FileNames);
-                    this.imageDetermination.Determinate(vm.ImageCards.Where(c => !c.IsChecked));
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
+                vm.AddImage(dialog.FileNames);
             });
         }
     }

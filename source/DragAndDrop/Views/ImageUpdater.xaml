@@ -7,6 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:model="clr-namespace:DragAndDrop.Model"
+             xmlns:cv="clr-namespace:DragAndDrop.Converters"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
              dd:DragDrop.IsDropTarget="True"
@@ -72,6 +73,8 @@
             </ListBox.Resources>
         </ListBox>
 
-        <ProgressBar Grid.Row="1" IsIndeterminate="{Binding Path=IsBusy, Mode=OneWay}" />
+        <ProgressBar Grid.Row="1" 
+                     Visibility="{Binding Path=IsBusy, Mode=OneWay, Converter={x:Static cv:StaticConverters.BooleanToVisibility}}"
+                     IsIndeterminate="True" />
     </Grid>
 </UserControl>

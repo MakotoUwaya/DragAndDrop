@@ -146,6 +146,7 @@
     <Compile Include="Converters\InvertBoolConverter.cs" />
     <Compile Include="Behaviors\CloseWindowAttached.cs" />
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
+    <Compile Include="Converters\StaticConverters.cs" />
     <Compile Include="DynamicJson.cs" />
     <Compile Include="ViewModels\ImageUpdaterViewModel.cs" />
     <Compile Include="Views\ImageUpdater.xaml.cs">
@@ -177,7 +178,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converters\BoolToVisibleConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

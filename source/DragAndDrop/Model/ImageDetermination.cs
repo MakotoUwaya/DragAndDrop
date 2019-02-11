@@ -31,23 +31,20 @@ namespace DragAndDrop.Model
         /// <param name="imageCards">判定する画像のリスト</param>
         internal void Determinate(IEnumerable<IImageCard> imageCards)
         {
-            Task.Run(() =>
+            Parallel.ForEach(imageCards, imageCard =>
             {
-                Parallel.ForEach(imageCards, async imageCard =>
-                {
-                    var timer = System.Diagnostics.Stopwatch.StartNew();
+                var timer = System.Diagnostics.Stopwatch.StartNew();
 
-                    var resultString = await this._determinator.Determinate(
-                        new Uri(Properties.Settings.Default.ImageDeterminationUrl),
-                        imageCard.ImageFilePath,
-                        ConsumerKeyString
-                    );
+                var resultString = this._determinator.Determinate(
+                    new Uri(Properties.Settings.Default.ImageDeterminationUrl),
+                    imageCard.ImageFilePath,
+                    ConsumerKeyString
+                ).Result;
 
-                    var result = DynamicJson.Parse(resultString);
-                    imageCard.IsChecked = true;
-                    imageCard.AutoCategory = $"prediction_index: {result.prediction_index}\nprobability: {result.probability}";
-                    imageCard.Time = $"Determinate time: {timer.ElapsedMilliseconds:#,0}";
-                });
+                var result = DynamicJson.Parse(resultString);
+                imageCard.IsChecked = true;
+                imageCard.AutoCategory = $"prediction_index: {result.prediction_index}\nprobability: {result.probability}";
+                imageCard.Time = $"Determinate time: {timer.ElapsedMilliseconds:#,0}";
             });
         }
     }
