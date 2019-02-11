@@ -143,11 +143,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\NumericTextBox.cs" />
+    <Compile Include="Converters\EnumToBooleanConverter.cs" />
     <Compile Include="Converters\InvertBoolConverter.cs" />
     <Compile Include="Behaviors\CloseWindowAttached.cs" />
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
     <Compile Include="Converters\StaticConverters.cs" />
     <Compile Include="DynamicJson.cs" />
+    <Compile Include="Model\DeterminatorType.cs" />
+    <Compile Include="Model\Settings.cs" />
     <Compile Include="ViewModels\ImageUpdaterViewModel.cs" />
     <Compile Include="Views\ImageUpdater.xaml.cs">
       <DependentUpon>ImageUpdater.xaml</DependentUpon>

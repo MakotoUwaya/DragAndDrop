@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Prism.Ioc;
 using Prism.Unity;
-
+using DragAndDrop.Model;
 using DragAndDrop.Views;
 using Interfaces;
 using aws = AWSDriver;
@@ -34,10 +34,15 @@ namespace DragAndDrop
         /// <param name="containerRegistry"></param>
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IDeterminator, aws.Determinator>();
-#if DEBUG
-            containerRegistry.Register<IDeterminator, google.Determinator>();
-#endif
+            switch ((DeterminatorType)DragAndDrop.Properties.Settings.Default.Determinator)
+            {
+                case DeterminatorType.AWS:
+                    containerRegistry.Register<IDeterminator, aws.Determinator>();
+                    break;
+                case DeterminatorType.Google:
+                    containerRegistry.Register<IDeterminator, google.Determinator>();
+                    break;
+            }
         }
     }
 }
