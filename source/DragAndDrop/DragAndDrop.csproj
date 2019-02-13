@@ -148,7 +148,6 @@
     <Compile Include="Behaviors\CloseWindowAttached.cs" />
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
     <Compile Include="Converters\StaticConverters.cs" />
-    <Compile Include="DynamicJson.cs" />
     <Compile Include="Model\DeterminatorType.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="ViewModels\ImageUpdaterViewModel.cs" />

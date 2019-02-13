@@ -5,6 +5,6 @@ namespace Interfaces
 {
     public interface IDeterminator
     {
-        Task<string> Determinate(Uri serverUrl, string filePath, string consumerKey);
+        Task<IImageCard> Determinate(Uri serverUrl, string filePath, string consumerKey);
     }
 }

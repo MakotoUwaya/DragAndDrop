@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Codeplex.Data;
 using Interfaces;
 
 namespace DragAndDrop.Model
@@ -35,15 +34,14 @@ namespace DragAndDrop.Model
             {
                 var timer = System.Diagnostics.Stopwatch.StartNew();
 
-                var resultString = this._determinator.Determinate(
+                var resultImageCard = this._determinator.Determinate(
                     new Uri(Properties.Settings.Default.ImageDeterminationUrl),
                     imageCard.ImageFilePath,
                     ConsumerKeyString
                 ).Result;
 
-                var result = DynamicJson.Parse(resultString);
-                imageCard.IsChecked = true;
-                imageCard.AutoCategory = $"prediction_index: {result.prediction_index}\nprobability: {result.probability}";
+                imageCard.IsChecked = resultImageCard.IsChecked;
+                imageCard.AutoCategory = resultImageCard.AutoCategory;
                 imageCard.Time = $"Determinate time: {timer.ElapsedMilliseconds:#,0}";
             });
         }

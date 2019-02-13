@@ -9,7 +9,7 @@ namespace GoogleVisionDriver
 {
     public class Determinator : IDeterminator
     {
-        public async Task<string> Determinate(Uri serverUrl, string filePath, string consumerKey = null)
+        public async Task<IImageCard> Determinate(Uri serverUrl, string filePath, string consumerKey = null)
         {
             if (!File.Exists(filePath))
             {
@@ -25,7 +25,7 @@ namespace GoogleVisionDriver
             {
                 throw new Google.GoogleApiException("Google.Cloud.Vision.V1", "Not response.");
             }
-            return $@"{{ ""prediction_index"": ""{firstLabel.Description}"", ""probability"": {firstLabel.Score}}}";
-        }
+	        return new ImageCard(true, $"Category: {firstLabel.Description}\nProbability: {firstLabel.Score}");
+		}
     }
 }
