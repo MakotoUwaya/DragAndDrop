@@ -123,9 +123,9 @@ namespace DragAndDrop.ViewModels
                     this.imageDetermination.Determinate(this.ImageCards.Where(c => !c.IsChecked));
                 });
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                MessageBox.Show(exception.Message);
+                MessageBox.Show($"{ex.Message}\n{ex.InnerException?.Message}\n{ex.InnerException?.InnerException?.Message}");
             }
             finally
             {
