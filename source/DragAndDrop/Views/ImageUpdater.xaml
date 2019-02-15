@@ -39,7 +39,7 @@
                                             Command="{Binding Path=PreviewImageCommand, Mode=OneTime}" 
                                             Padding="0" Height="330" Width="296" 
                                             HorizontalAlignment="Center" VerticalAlignment="Center" >
-                                <Image Source="{Binding Path=ImageFilePath, Mode=OneTime}" Stretch="UniformToFill" />
+                                <Image Source="{Binding Path=ImageFilePath, IsAsync=True, Mode=OneTime}" Stretch="UniformToFill" />
                             </Button>
                             <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="5,0,0,0">
                                 <!--<TextBlock TextWrapping="Wrap" FontWeight="Bold" Text="{Binding Path=ImageGuid, Mode=OneTime}" />-->
