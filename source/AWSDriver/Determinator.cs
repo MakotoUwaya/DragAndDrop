@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -32,7 +34,15 @@ namespace AWSDriver
                 throw new WebException(response.ReasonPhrase);
             }
             var result =  DynamicJson.Parse(await response.Content.ReadAsStringAsync());
-            return new ImageCard(true, $"Category: {result.prediction}({result.prediction_index})\nProbability: {result.probability}");
+            var dict = new Dictionary<string, string>
+            {
+                {result.prediction, result.probability}
+            };
+
+            return new ImageCard(true, result.prediction)
+            {
+                Probabilities = new ReadOnlyDictionary<string, string>(dict)
+            };
         }
 
         private static byte[] CreateStreamContent(string imageFilePath)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
@@ -28,6 +29,8 @@ namespace DragAndDrop.Model
             get => this.autoCategory;
             set => this.SetProperty(ref this.autoCategory, value);
         }
+
+        public ReadOnlyDictionary<string, string> Probabilities { get; set; }
 
         private string manualCategory;
         /// <summary>

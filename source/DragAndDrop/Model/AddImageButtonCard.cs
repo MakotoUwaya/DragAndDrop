@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using Microsoft.Win32;
@@ -19,6 +20,8 @@ namespace DragAndDrop.Model
             get => string.Empty;
             set { }
         }
+
+        public ReadOnlyDictionary<string, string> Probabilities { get; set; }
 
         public bool IsChecked
         {

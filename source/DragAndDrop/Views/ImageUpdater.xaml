@@ -28,7 +28,9 @@
 
             <ListBox.Resources>
                 <DataTemplate DataType="{x:Type model:ImageCard}">
-                    <materialDesign:Card Width="300" Margin="3" >
+                    <materialDesign:Card Background="#03a9f4"
+                                         Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                         Width="300" Margin="3" >
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="200" />
@@ -43,9 +45,10 @@
                             </Button>
                             <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="5,0,0,0">
                                 <!--<TextBlock TextWrapping="Wrap" FontWeight="Bold" Text="{Binding Path=ImageGuid, Mode=OneTime}" />-->
-                                <TextBlock FontWeight="Bold" Text="{Binding Path=AutoCategory, Mode=OneWay}" />
-                                <TextBlock FontWeight="Bold" Text="{Binding Path=Time, Mode=OneWay}" />
-                                <TextBox FontWeight="Bold" Text="{Binding Path=ManualCategory, Mode=TwoWay}" />
+                                <ComboBox FontWeight="Bold" Margin="5,2,65,2"
+                                          ItemsSource="{x:Static model:ImageCategory.List}"
+                                          SelectedItem="{Binding Path=AutoCategory, Mode=TwoWay}" />
+                                <TextBlock HorizontalAlignment="Right" Margin="0,2,65,2" Text="{Binding Path=Time, Mode=OneWay}" />
                             </StackPanel>
                             <StackPanel HorizontalAlignment="Right" Grid.Row="1" Orientation="Horizontal" Margin="8">
                                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"

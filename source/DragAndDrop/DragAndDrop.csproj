@@ -155,6 +155,7 @@
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
     <Compile Include="Converters\StaticConverters.cs" />
     <Compile Include="Model\DeterminatorType.cs" />
+    <Compile Include="Model\ImageCategory.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="ViewModels\ImageUpdaterViewModel.cs" />
     <Compile Include="Views\ImageUpdater.xaml.cs">

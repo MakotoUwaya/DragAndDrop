@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,7 +27,18 @@ namespace GoogleVisionDriver
             {
                 throw new Google.GoogleApiException("Google.Cloud.Vision.V1", "Not response.");
             }
-	        return new ImageCard(true, $"Category: {firstLabel.Description}\nProbability: {firstLabel.Score}");
-		}
+
+            var dict = new Dictionary<string, string>
+            {
+                { firstLabel.Description, $"{firstLabel.Score}" }
+            };
+
+            var random = new Random();
+
+            return new ImageCard(true, "ポスト")
+            {
+                Probabilities = new ReadOnlyDictionary<string, string>(dict)
+            };
+        }
     }
 }

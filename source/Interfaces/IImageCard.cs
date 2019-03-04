@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace Interfaces
 {
@@ -11,6 +12,8 @@ namespace Interfaces
         bool IsChecked { get; set; }
 
         string AutoCategory { get; set; }
+
+        ReadOnlyDictionary<string, string> Probabilities { get; set; }
 
         string Time { get; set; }
     }
